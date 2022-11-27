@@ -1,0 +1,8 @@
+--trusted-host pypi.org --trusted-host files.pythonhosted.org
+--index-url https://www.python.org/pypi
+pytest
+pook
+flake8
+setuptools
+wheel
+twine
