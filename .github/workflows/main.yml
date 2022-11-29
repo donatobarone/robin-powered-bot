@@ -21,18 +21,17 @@ jobs:
   build:
     runs-on: [ubuntu-latest]
     timeout-minutes: 10
-    container: python:3.8-slim
+    # container: python:3.9
     env:
       RELEASE_BRANCH: "refs/heads/main"
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - name: Setup Python
-      #   uses: actions/setup-python@v3
-      #   with:
-      #     python-version: "3.9.11"
-      #     token: ${{ secrets.GITHUB_TOKEN}}
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
 
       - name: Install Requirements
         run: |
@@ -53,7 +52,7 @@ jobs:
         run: |
           python setup.py sdist bdist_wheel
           twine upload dist/* --verbose
-      # - name: Publish package
-      #   uses: pypa/gh-action-pypi-publish@release/v1
-      #   with:
-      #     password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Publish package
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
