@@ -14,6 +14,12 @@ class Reservation:
     CHECKIN_URL_TEMPLATE = "https://api.robinpowered.com/v1.0/reservations/seats/{}/confirmation"
     EMPTY_RESERVATION_ID = "-1"
 
+    # TODO: see if we can set the timezone properly
+    TIMEZONE_FORMAT_MAPPING = {
+        'America/New_York': '-0500',
+        'Etc/UTC': 'Z',
+    }
+
     def __init__(self, user_info: UserInfo, rdate: datetime = None):
         self._user_info = user_info
         current_time = rdate if rdate else datetime.utcnow()
@@ -23,8 +29,9 @@ class Reservation:
         self._headers = {"Authorization": f"Access-Token {token}"}
 
     @classmethod
-    def format_datetime(cls, date: datetime) -> str:
-        return date.strftime('%Y-%m-%dT%H:00:00Z')
+    def format_datetime(cls, date: datetime, timezone: str = "Etc/UTC") -> str:
+        tz_str = cls.TIMEZONE_FORMAT_MAPPING[timezone]
+        return f"{date.strftime('%Y-%m-%dT%H:00:00')}{tz_str}"
 
     @classmethod
     def build_list_reservations_url(cls, sdate: datetime, edate: datetime, sid: int):

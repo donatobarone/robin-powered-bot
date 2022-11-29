@@ -14,10 +14,12 @@ from tests.constants import (ALREADY_CHECKED_IN, CHECK_IN_PAST, DURATION,
 
 
 def test_format_datetime():
-    formatted = Reservation.format_datetime(datetime(2022, 8, 22, 11))
+    formatted = Reservation.format_datetime(datetime(2022, 8, 22, 11), 'Etc/UTC')
     assert formatted == "2022-08-22T11:00:00Z"
     formatted = Reservation.format_datetime(datetime(2022, 8, 22, 15))
     assert formatted == "2022-08-22T15:00:00Z"
+    formatted = Reservation.format_datetime(datetime(2022, 8, 22, 15), 'America/New_York')
+    assert formatted == "2022-08-22T15:00:00-0500"
 
 
 def test_build_reservation_url():
