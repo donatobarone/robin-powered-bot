@@ -1,9 +1,7 @@
 import os
+import requests
 from datetime import datetime, timedelta
 from typing import List
-
-import requests
-
 from robot.user import UserInfo
 
 
@@ -44,11 +42,11 @@ class Reservation:
         url = cls.SET_RESERVATION_URL_TEMPLATE.format(sid)
         body = {'type': 'hoteled',
                 "start": {
-                    "date_time": cls.format_datetime(sdate),
+                    "date_time": cls.format_datetime(sdate, timezone),
                     "time_zone": timezone
                 },
                 "end": {
-                    "date_time": cls.format_datetime(edate),
+                    "date_time": cls.format_datetime(edate, timezone),
                     "time_zone": timezone
                 },
                 "reservee": {
