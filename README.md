@@ -33,7 +33,7 @@ UserInfo is used to load and store all info about the user, it needs the followi
 
 ```py
 from src.user import UserInfo
-users_info = [UserInfo("dbarone@factset.com", 11, 8, 196962)]
+users_info = [UserInfo("dbarone@company.com", 11, 8, 10)]
 ```
 
 **Notes**: Seat Id has still to be provided, haven't found yet a more user friendly way to do it.
@@ -47,7 +47,7 @@ from datetime import datetime
 from src.robin import Robin
 from src.user import UserInfo
 
-users_info = [UserInfo("dbarone@factset.com", 11, 8, 196962)]
+users_info = [UserInfo("dbarone@company.com", 11, 8, 10)]
 r = Robin(users_info)
 results = r.reserve(datetime(2022, 11, 15), datetime(2022, 11, 20))
 print(results)
@@ -70,7 +70,7 @@ from datetime import datetime
 from src.robin import Robin
 from src.user import UserInfo
 
-users_info = [UserInfo("dbarone@factset.com", 11, 8, 196962)]
+users_info = [UserInfo("dbarone@company.com", 11, 8, 10)]
 r = Robin(users_info)
 results = r.check_in(datetime(2022, 11, 24))
 print(results)
