@@ -5,6 +5,10 @@ from typing import List
 from robot.user import UserInfo
 
 
+class AlreadyCheckedInError(Exception):
+    pass
+
+
 class Reservation:
 
     LIST_RESERVATIONS_URL_TEMPLATE = "https://api.robinpowered.com/v1.0/reservations/seats?before={}&after={}&seat_ids={}"
@@ -71,7 +75,7 @@ class Reservation:
             raise Exception("should only contain 1 reservation")
         reservation = reservations[0]
         if reservation['confirmation'] is not None:
-            return Exception("already checked in")
+            raise AlreadyCheckedInError("desk is already checked in")
         return reservation['id']
 
     def _reserve(self) -> str:

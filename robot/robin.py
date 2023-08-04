@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Dict, List
 
-from robot.reservations import Reservation
+from robot.reservations import AlreadyCheckedInError, Reservation
 
 
 class Robin:
@@ -41,15 +41,19 @@ class Robin:
     def check_in(self, current: datetime) -> Dict:
         results = {}
         for user_info in self.users_info:
-            _, reserver_id = user_info.seat_id, user_info.reserver_id
-            reservation = Reservation(user_info, current)
-            reservation_id = reservation._get_id()
-            if "-1" == reservation_id:
-                print(f"no reservation to confirm for {reserver_id}")
-                continue
+            try:
+                _, reserver_id = user_info.seat_id, user_info.reserver_id
+                reservation = Reservation(user_info, current)
+                reservation_id = reservation._get_id()
+                if "-1" == reservation_id:
+                    print(f"no reservation to confirm for {reserver_id}")
+                    continue
 
-            reservation._check_in(reservation_id)
-            print(f"check in successful for {reservation_id}")
-            results[reserver_id] = True
-
+                reservation._check_in(reservation_id)
+                print(f"check in successful for {reservation_id}")
+                results[reserver_id] = True
+            except AlreadyCheckedInError as e:
+                print(f"error whilst checking in: {e}")                
+                results[reserver_id] = False
+                pass
         return results
