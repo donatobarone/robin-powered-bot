@@ -84,6 +84,58 @@ JSON_RESPONSE = {
     }
 }
 
+RESERVATION_CHECKED_IN_BODY = {
+    "meta": {
+        "status_code": 200,
+        "status": "OK",
+        "message": "",
+        "more_info": {},
+        "errors": []
+    },
+    "data": [{
+        "id": "2498667793369531480",
+        "group_seat_reservation_id": None,
+        "seat_id": 196962,
+        "reserver_id": 619521,
+        "type": "hoteled",
+        "title": None,
+        "start": {
+            "date_time": "2022-08-22T11:00:00+0100",
+            "time_zone": "Etc/UTC"
+        },
+        "end": {
+            "date_time": "2022-08-22T19:00:00+0100",
+            "time_zone": "Etc/UTC"
+        },
+        "recurrence": None,
+        "series_id": None,
+        "recurrence_id": None,
+        "created_at": "2023-07-22T12:06:52+0000",
+        "updated_at": "2023-08-04T13:00:49+0000",
+        "reservee": {
+            "email": "dbarone@factset.com",
+            "user_id": 619521,
+            "visitor_id": None,
+            "participation_status": "accepted"
+        },
+        "confirmation": {
+            "seat_reservation_id": "2498667793369531480",
+            "device_id": None,
+            "user_id": 619521,
+            "confirmed_at": {
+                "date": "2023-08-04 13:00:49.000000",
+                "timezone_type": 3,
+                "timezone": "UTC"
+            }
+        }
+    }],
+    "paging": {
+        "page": 1,
+        "per_page": 10,
+        "has_next_page": False
+    }
+}
+
 EMPTY_JSON_RESPONSE = {
     "meta": {
         "status_code": 200,
@@ -115,6 +167,8 @@ RESERVATION_BODY = {
     },
     "reserver_id": 619521
 }
+
+
 
 SUCCESSFUL_RESERVATION = {
     "meta": {
@@ -248,3 +302,4 @@ SUCCESSFUL_CHECK_IN = {
         }
     }
 }
+
