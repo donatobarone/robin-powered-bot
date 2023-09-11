@@ -8,7 +8,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='robin-powered-bot',
-    version='0.0.6',
+    version='0.0.7',
     description='Provides a set of utilities to simplify communication with robin-powered API and more easily automate bookings.',
     url='https://github.com/donatobarone/robin-powered-bot',
     author='Donato Barone',
