@@ -20,6 +20,7 @@ class Reservation:
     TIMEZONE_FORMAT_MAPPING = {
         'America/New_York': '-0500',
         'Etc/UTC': 'Z',
+        'Europe/Paris': '+0100'
     }
 
     def __init__(self, user_info: UserInfo, rdate: datetime = None):
