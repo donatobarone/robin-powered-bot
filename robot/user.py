@@ -1,7 +1,7 @@
 import email
 import os
 
-import requests
+from robot.requests import RetrySession
 
 
 class UserInfo:
@@ -13,11 +13,14 @@ class UserInfo:
         self.seat_id = sid
         self.start_time = stime
         self.duration = duration
-        self._token = os.getenv("ROBIN_AUTH_TOKEN")
-        self._headers = {"Authorization": f"Access-Token {self._token}"}
         user_info = self._get_user_info() if not rid or not tz else None
         self.reserver_id = rid if rid else user_info['id']
         self.timezone = tz if tz else user_info['time_zone']
+
+        self._token = os.getenv("ROBIN_AUTH_TOKEN")
+        self._session = RetrySession()
+        self._session.headers = {"Authorization": f"Access-Token {self._token}"}
+        self._session.verify = False
 
     @classmethod
     def build_user_url(cls, email: str) -> str:
@@ -25,7 +28,7 @@ class UserInfo:
 
     def _get_user_info(self):
         url = self.build_user_url(self.email)
-        response = requests.get(url, headers=self._headers, verify=False)
+        response = self._session.get(url)
         if response.status_code == 200:
             return response.json()['data']
 

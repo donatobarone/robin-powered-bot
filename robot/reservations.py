@@ -1,8 +1,8 @@
 import os
-import requests
 from datetime import datetime, timedelta
 from typing import List
 from robot.user import UserInfo
+from robot.requests import RetrySession
 
 
 class AlreadyCheckedInError(Exception):
@@ -28,8 +28,11 @@ class Reservation:
         current_time = rdate if rdate else datetime.utcnow()
         self._reservation_date_start = current_time.replace(hour=user_info.start_time, minute=0, second=0, microsecond=0)
         self._reservation_date_end = self._reservation_date_start + timedelta(hours=user_info.duration)
+
         token = os.getenv("ROBIN_AUTH_TOKEN", "")
-        self._headers = {"Authorization": f"Access-Token {token}"}
+        self._session = RetrySession()
+        self._session.headers = {"Authorization": f"Access-Token {token}"}
+        self._session.verify = False
 
     @classmethod
     def format_datetime(cls, date: datetime, timezone: str = "Etc/UTC") -> str:
@@ -68,7 +71,7 @@ class Reservation:
 
     def _get_id(self) -> str:
         url = self.build_list_reservations_url(self._reservation_date_start, self._reservation_date_end, self._user_info.seat_id)
-        response = requests.get(url, headers=self._headers, verify=False)
+        response = self._session.get(url)
         reservations = response.json()['data']
         if len(reservations) == 0:
             return self.EMPTY_RESERVATION_ID
@@ -82,8 +85,7 @@ class Reservation:
     def _reserve(self) -> str:
         url, body = self.build_reserve_request(self._reservation_date_start, self._reservation_date_end,
                                                self._user_info.seat_id, self._user_info.reserver_id, self._user_info.email, self._user_info.timezone)
-        response = requests.post(
-            url, json=body, headers=self._headers, verify=False)
+        response = self._session.post(url, json=body)
         if response.status_code == 200:
             return response.json()['data']['id']
         if response.status_code == 400:
@@ -100,8 +102,7 @@ class Reservation:
 
     def _check_in(self, reservation_id: int):
         url, body = self.build_checkin_request(self._user_info.reserver_id, reservation_id)
-        response = requests.put(
-            url, json=body, headers=self._headers, verify=False)
+        response = self._session.put(url, json=body)
         if response.status_code == 200:
             data_response = response.json()['data']
             return [data_response['seat_reservation_id'], data_response['confirmed_at']['date']]
